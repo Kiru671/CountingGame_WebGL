@@ -6,6 +6,6 @@ public class Spin : MonoBehaviour
 {
     void Update()
     {
-        transform.rotation *= Quaternion.Euler(0,15 * Time.deltaTime,0);
+        transform.rotation *= Quaternion.Euler(0,25 * Time.deltaTime,0);
     }
 }
