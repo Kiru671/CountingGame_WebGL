@@ -8,7 +8,7 @@ public class Counter : MonoBehaviour
 {
     public Text CounterText;
 
-    private int Count = 0;
+    private static int Count = 0;
 
     private void Start()
     {
@@ -17,7 +17,22 @@ public class Counter : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Count += 1;
+        if (!other.gameObject.CompareTag("Ball"))
+            return;
+        other.gameObject.tag = "Untagged";
+        switch (gameObject.tag)
+        {
+            case "Magenta":
+                Count += 5; break;
+            case "Yellow":
+                Count += 2; break;
+            case "Cyan":
+                Count += 10; break;
+            case "Black":
+                Count -= 1; break;
+            default:
+                Debug.Log("Def"); break;
+        }
         CounterText.text = "Score : " + Count;
     }
 }

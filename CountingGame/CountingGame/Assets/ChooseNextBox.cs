@@ -1,37 +1,51 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class ChooseNextBox : MonoBehaviour
 {
-    [SerializeField] private GameObject[] boxes;
-    private GameObject currentBox;
+    [SerializeField] private GameObject[] shownBoxes;
+    [SerializeField] private GameObject[] boxPrefabs;
+    
+    private GameObject currentShownBox;
+    public static GameObject currentBox;
+    
+    public event Action<GameObject> OnBoxSelected;
+    
     void Start()
     {
         FillSlider.OnSliderFull += GetRandomBox;
-    }
-    
-    void Update()
-    {
-        
+        GiveBox.OnBoxGotten += DisableShownBox;
+        GiveBox.OnBoxDropped += NullifyBox;
+        GetRandomBox();
     }
     
     private void GetRandomBox()
     {
-        if (currentBox != null)
+        int randInt = Random.Range(0, shownBoxes.Length);
+        currentShownBox = shownBoxes[randInt];
+        currentBox = boxPrefabs[randInt];
+        foreach (var box in shownBoxes)
         {
-            Destroy(currentBox);
+            if(box != currentShownBox)
+            {
+                box.SetActive(false);
+            }
+            else
+            {
+                box.SetActive(true);
+            }
         }
-        currentBox = boxes[Random.Range(0, boxes.Length)];
-    }
-    
-    public void GetBoxIntoWorld()
-    {
-        Debug.Log("DRAG");
     }
 
-    public void DragBox()
+    private void DisableShownBox()
     {
-        Debug.Log("OH NO I'M BEING DRAGGED AAHHH!!!");
+        currentShownBox.SetActive(false);
+    }
+    private void NullifyBox()
+    {
+        currentBox = null;
     }
 }
